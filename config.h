@@ -7,6 +7,11 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
+#ifndef DEFAULT_PORT
+#warning DEFAULT_PORT has not been defined in Makefile.
+#define DEFAULT_PORT	6667
+#endif
+
 #define FLAG_SHOWVERSION	(1 << 0)
 #define FLAG_DEBUG			(1 << 1)
 
@@ -15,8 +20,12 @@ struct config {
 	char	*cfg_package;
 	char	*cfg_version;
 	int		cfg_flags;
+	char	*cfg_host;
+	char	*cfg_port;
 }; /* struct config */
 
 extern struct config config;
+
+void show_config(void);
 
 #endif /* _CONFIG_H */

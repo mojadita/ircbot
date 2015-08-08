@@ -11,34 +11,13 @@
 #include <string.h>
 #include <time.h>
 
-#define BUFFSIZE	1024
-#define MAX_ARGS	128
-
-/* automaton states */
-#define AT_BOM		0
-#define IN_ORG		1
-#define IN_SPC0		2
-#define IN_CMD		3
-#define IN_SPC1		4
-#define IN_ARG		5
-#define IN_ARGN		6
-#define IN_EOL		7
-
-struct message {
-	char buffer[BUFFSIZE];
-	int status;
-	size_t sz, argc;
-	char *p, *org, *cmd, *argv[MAX_ARGS];
-	void (*cb)(struct message *);
-};
-
+#include "input.h"
 
 void input(FILE *fd, struct message *p)
 {
 	int c;
-	int status;
 
-#define ST(X) do { status = (X); } while(0)
+#define ST(X) do { p->status = (X); } while(0)
 #define MK(X) do { p->X = p->p; } while(0)
 #define RST() do { \
 	ST(AT_BOM); \
@@ -59,7 +38,7 @@ void input(FILE *fd, struct message *p)
 
 	RST();
 	while ((c = fgetc(fd)) != EOF) {
-		switch (status) {
+		switch (p->status) {
 		case AT_BOM:
 			switch (c) {
 			case ':': ST(IN_ORG); MK(org); break;

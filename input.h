@@ -7,6 +7,33 @@
 #define _INPUT_H
 
 #include <sys/types.h>
-ssize_t input_msg(int fd, char *in, size_t sz);
+
+#define BUFFSIZE	1024
+#define MAX_ARGS	128
+
+/* automaton states */
+enum status {
+	AT_BOM,
+	IN_ORG,
+	IN_SPC0,
+	IN_CMD,
+	IN_SPC1,
+	IN_ARG,
+	IN_ARGN,
+	IN_EOL,
+}; /* enum status */
+
+struct message {
+	char		buffer[BUFFSIZE];
+	enum status	status;
+	size_t		sz, argc;
+	char		*p,
+				*org,
+				*cmd,
+				*argv[MAX_ARGS];
+	void (*cb)(struct message *);
+};
+
+void input(FILE *fd, struct message *p);
 
 #endif /* _INPUT_H */

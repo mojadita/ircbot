@@ -4,7 +4,10 @@
  * Copyright: (C) 2015 LUIS COLORADO.  All rights reserved.
  */
 
+#include <stdio.h>
+
 #include "config.h"
+#include "debug.h"
 
 #ifndef PREFIX
 #error PREFIX must be defined to compile this module.
@@ -21,4 +24,17 @@ struct config config = {
 	.cfg_package	= PACKAGE,
 	.cfg_version	= VERSION,
 	.cfg_flags		= 0,
+	.cfg_host		= "localhost",
+	.cfg_port		= "irc",
 }; /* config */
+
+void show_config(void)
+{
+#define STR "\"%s\""
+#define HEX	"%#010x"
+	TR(STR, char *,	config.cfg_libdir);
+	TR(STR, char *,	config.cfg_version);
+	TR(HEX,	int,	config.cfg_flags);
+	TR(STR, char *,	config.cfg_host);
+	TR(STR, char *,	config.cfg_port);
+} /* show_config */
