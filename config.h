@@ -14,6 +14,7 @@
 
 #define FLAG_SHOWVERSION	(1 << 0)
 #define FLAG_DEBUG			(1 << 1)
+#define FLAG_HELP			(1 << 2)
 
 struct config {
 	char	*cfg_libdir;

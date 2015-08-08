@@ -17,6 +17,27 @@
 #include "debug.h"
 #include "config.h"
 
+void do_help()
+{
+	printf(
+		"Usage: %s [ options ... ]\n"
+		"options:\n"
+		" -V shows ircbot version.\n"
+		" -L <libdir> allows to change the\n"
+		"	directory from where shared modules\n"
+		"	are loaded.\n"
+		" -d Debug mode.  Show traces of what's\n"
+		"	being done.\n"
+		" -h <host> set the host to connect to.\n"
+		" -p <port> set the port number to\n"
+		"	connect to.\n"
+		" -? Get help.  Shows this help text\n"
+		"", /* to facilitate to add new lines */
+	config.cfg_package
+		);
+	exit(EXIT_SUCCESS);
+} /* do_help */
+
 int main(int argc, char **argv)
 {
 	int opt, res;
@@ -25,13 +46,14 @@ int main(int argc, char **argv)
 	struct hostent *host;
 	struct servent *port;
 
-	while ((opt = getopt(argc, argv, "VL:dh:p:")) != EOF) {
+	while ((opt = getopt(argc, argv, "VL:dh:p:?")) != EOF) {
 		switch (opt) {
 		case 'V': config.cfg_flags |= FLAG_SHOWVERSION; break;
 		case 'L': config.cfg_libdir = optarg; break;
 		case 'd': config.cfg_flags |= FLAG_DEBUG; break;
 		case 'h': config.cfg_host = optarg; break;
 		case 'p': config.cfg_port = optarg; break;
+		case '?': config.cfg_flags |= FLAG_HELP; break;
 		} /* switch */
 	} /* while */
 
@@ -39,6 +61,10 @@ int main(int argc, char **argv)
 		printf(D("Version: %s\n"),
 			config.cfg_version);
 		exit(EXIT_SUCCESS);
+	} /* if */
+
+	if (config.cfg_flags & FLAG_HELP) {
+		do_help();
 	} /* if */
 
 	if (config.cfg_flags & FLAG_DEBUG)
