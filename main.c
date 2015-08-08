@@ -16,13 +16,27 @@ int main(int argc, char **argv)
 {
 	int opt;
 
-	while ((opt = getopt(argc, argv, "VL:")) != EOF) {
+	while ((opt = getopt(argc, argv, "VL:d")) != EOF) {
 		switch (opt) {
-		case 'V': show_version(); break;
+		case 'V': config.cfg_flags |= FLAG_SHOWVERSION; break;
 		case 'L': config.cfg_libdir = optarg; break;
+		case 'd': config.cfg_flags |= FLAG_DEBUG; break;
 		} /* switch */
 	} /* while */
-#define P(fmt, X) printf(#X": " fmt "\n", (X))
-	P("%s", config.cfg_libdir);
+
+	if (config.cfg_flags & FLAG_SHOWVERSION) {
+		printf(D("Version: %s\n"),
+			config.cfg_version);
+		exit(EXIT_SUCCESS);
+	} /* if */
+
+	if (config.cfg_flags & FLAG_DEBUG) {
+#define P(fmt, X) printf(D(#X " = " fmt "\n"), X)
+		P("%s", config.cfg_libdir);
+		P("%s", config.cfg_version);
+		P("%#x", config.cfg_flags);
+#undef P
+	} /* if */
+
 	exit(EXIT_SUCCESS);
-}
+} /* main */

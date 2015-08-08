@@ -7,9 +7,18 @@
 #include "config.h"
 
 #ifndef PREFIX
-#define PREFIX "/usr/local"
+#error PREFIX must be defined to compile this module.
+#endif
+#ifndef PACKAGE
+#error PACKAGE must be defined to compile this module.
+#endif
+#ifndef VERSION
+#error VERSION must be defined to compile this module.
 #endif
 
 struct config config = {
-	.cfg_libdir = PREFIX "/lib",
+	.cfg_libdir		= PREFIX "/lib/" PACKAGE,
+	.cfg_package	= PACKAGE,
+	.cfg_version	= VERSION,
+	.cfg_flags		= 0,
 }; /* config */

@@ -7,9 +7,15 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
+#define FLAG_SHOWVERSION	(1 << 0)
+#define FLAG_DEBUG			(1 << 1)
+
 struct config {
-	char *cfg_libdir;
-};
+	char	*cfg_libdir;
+	char	*cfg_package;
+	char	*cfg_version;
+	int		cfg_flags;
+}; /* struct config */
 
 extern struct config config;
 
