@@ -23,6 +23,7 @@ struct config {
 	int		cfg_flags;
 	char	*cfg_host;
 	char	*cfg_port;
+	char	*cfg_script;
 }; /* struct config */
 
 extern struct config config;

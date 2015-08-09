@@ -13,7 +13,7 @@
 
 #include "input.h"
 
-void input(FILE *fd, struct message *p)
+void input(FILE *fd, void (*cb)(struct message *), struct message *p)
 {
 	int c;
 
@@ -66,7 +66,7 @@ void input(FILE *fd, struct message *p)
 			switch(c) {
 			case ' ': ST(IN_SPC1); ADDCH(0); break;
 			case '\r': ST(IN_EOL); ADDCH(0); break;
-			case '\n': ADDARG(NULL); p->cb(p); RST(); break;
+			case '\n': ADDARG(NULL); cb(p); RST(); break;
 			case ':': /* NO BREAK HERE, valid char */
 			default: ADDCH(c); break;
 			} break;
@@ -74,7 +74,7 @@ void input(FILE *fd, struct message *p)
 			switch(c) {
 			case ' ': break; /* ignore */
 			case '\r': ST(IN_EOL); break;
-			case '\n': ADDARG(NULL); p->cb(p); RST(); break;
+			case '\n': ADDARG(NULL); cb(p); RST(); break;
 			case ':': ST(IN_ARGN); ADDARG(p->p); break;
 			default: ST(IN_ARG); ADDARG(p->p); ADDCH(c); break;
 			} break;
@@ -82,20 +82,20 @@ void input(FILE *fd, struct message *p)
 			switch (c) {
 			case ' ': ST(IN_SPC1); ADDCH(0); break;
 			case '\r': ST(IN_EOL); ADDCH(0); break;
-			case '\n': ADDARG(NULL); p->cb(p); RST(); break;
+			case '\n': ADDARG(NULL); cb(p); RST(); break;
 			case ':':
 			default: ADDCH(c); break;
 			} break;
 		case IN_ARGN:
 			switch (c) {
 			case '\r': ST(IN_EOL); ADDCH(0); break;
-			case '\n': ADDARG(NULL); p->cb(p); RST(); break;
+			case '\n': ADDARG(NULL); cb(p); RST(); break;
 			default: ADDCH(c); break;
 			} break;
 		case IN_EOL:
 			switch (c) {
 			case '\r': break;
-			case '\n': ADDARG(NULL); p->cb(p); RST(); break;
+			case '\n': ADDARG(NULL); cb(p); RST(); break;
 			case ':': RST(); ST(IN_ORG); break;
 			default: RST(); break;
 			} break;

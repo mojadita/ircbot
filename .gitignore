@@ -1,2 +1,6 @@
 *.o
 ircbot
+.depend
+cfgscan
+make.log
+test_callback

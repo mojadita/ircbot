@@ -31,9 +31,11 @@ struct message {
 				*org,
 				*cmd,
 				*argv[MAX_ARGS];
-	void (*cb)(struct message *);
 };
 
-void input(FILE *fd, struct message *p);
+void input(
+	FILE *fd,						/* input file descriptor */
+	void (*cb)(struct message *),	/* callback routine */
+	struct message *p);				/* data message */
 
 #endif /* _INPUT_H */

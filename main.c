@@ -16,6 +16,8 @@
 
 #include "debug.h"
 #include "config.h"
+#include "input.h"
+#include "input_cb.h"
 
 void do_help()
 {
@@ -45,15 +47,18 @@ int main(int argc, char **argv)
 	struct sockaddr_in srvr;
 	struct hostent *host;
 	struct servent *port;
+	struct message msg;
+	FILE *in;
 
-	while ((opt = getopt(argc, argv, "VL:dh:p:?")) != EOF) {
+	while ((opt = getopt(argc, argv, "L:Vdf:h:p:")) != EOF) {
 		switch (opt) {
-		case 'V': config.cfg_flags |= FLAG_SHOWVERSION; break;
+		case '?': config.cfg_flags |= FLAG_HELP; break;
 		case 'L': config.cfg_libdir = optarg; break;
+		case 'V': config.cfg_flags |= FLAG_SHOWVERSION; break;
 		case 'd': config.cfg_flags |= FLAG_DEBUG; break;
+		case 'f': config.cfg_script = optarg; break;
 		case 'h': config.cfg_host = optarg; break;
 		case 'p': config.cfg_port = optarg; break;
-		case '?': config.cfg_flags |= FLAG_HELP; break;
 		} /* switch */
 	} /* while */
 
@@ -94,6 +99,14 @@ int main(int argc, char **argv)
 			strerror(errno),
 			errno);
 	} /* if */
+
+	in = fdopen(sfd, "r");
+	if (!in) {
+		ERR(D("ERROR: fdopen: %s (errno = %d)\n"),
+			strerror(errno), errno);
+	} /* if */
+
+	input(in, input_cb, &msg);
 
 	exit(EXIT_SUCCESS);
 } /* main */

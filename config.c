@@ -23,9 +23,10 @@ struct config config = {
 	.cfg_libdir		= PREFIX "/lib/" PACKAGE,
 	.cfg_package	= PACKAGE,
 	.cfg_version	= VERSION,
-	.cfg_flags		= 0,
+	.cfg_flags		= FLAG_DEBUG,
 	.cfg_host		= "localhost",
 	.cfg_port		= "irc",
+	.cfg_script		= ".rcircbot",
 }; /* config */
 
 void show_config(void)
@@ -37,4 +38,5 @@ void show_config(void)
 	TR(HEX,	int,	config.cfg_flags);
 	TR(STR, char *,	config.cfg_host);
 	TR(STR, char *,	config.cfg_port);
+	TR(STR, char *,	config.cfg_script);
 } /* show_config */
