@@ -4,3 +4,6 @@ ircbot
 cfgscan
 make.log
 test_callback
+test_atoms
+core
+*.core
